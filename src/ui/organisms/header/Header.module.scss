@@ -1,0 +1,30 @@
+.blog-header {
+}
+
+.header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+	min-height: 80px;
+	background-color: #fff;
+	padding: 0 22px;
+	font-size: 18px;
+	&-actions {
+		margin-left: 10px;
+	}
+	&-button {
+		line-height: 1.55;
+		&_dark {
+			color: rgba(0, 0, 0, 0.85);
+			margin-right: 20px;
+		}
+		&_green {
+			color: #52c41a;
+			min-height: 50px;
+			padding: 10px 18px;
+			border-radius: 5px;
+			border: 1px solid #52c41a;
+		}
+	}
+}

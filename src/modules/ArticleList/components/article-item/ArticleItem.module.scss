@@ -1,0 +1,135 @@
+//article ====
+.custom-scrollbar {
+	&::-webkit-scrollbar-track {
+		border-radius: 4px;
+	}
+	&::-webkit-scrollbar {
+		width: 5px;
+	}
+	&::-webkit-scrollbar-thumb {
+		border-radius: 4px;
+		background: #f0f2f5;
+	}
+	&:hover::-webkit-scrollbar-thumb {
+		background: #6a7d9b;
+	}
+}
+
+.article {
+	@media (min-width: 767.98px) {
+		display: flex;
+		justify-content: space-between;
+		padding: 15px 15px 24px;
+	}
+	padding: 15px;
+	box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.15);
+	border-radius: 5px;
+	background-color: #fff;
+
+	&-data {
+		font-size: 12px;
+		color: rgba(0, 0, 0, 0.75);
+
+		@media (min-width: 767.98px) {
+			max-width: 680px;
+			margin-right: 10px;
+		}
+		@media (max-width: 767.98px) {
+			margin-bottom: 15px;
+		}
+	}
+
+	&-head {
+		display: flex;
+		margin-bottom: 5px;
+		@media (max-width: 767.98px) {
+			justify-content: space-between;
+		}
+	}
+	&-title {
+		color: #1890ff;
+		font-size: 20px;
+		line-height: 1.4;
+		margin-right: 13px;
+		overflow-wrap: anywhere;
+		cursor: pointer;
+		max-height: 100px;
+		overflow-y: auto;
+	}
+	&-likes {
+		align-self: flex-start;
+		line-height: 1.83;
+		margin-top: 3px;
+		cursor: pointer;
+		display: inline-flex;
+		align-items: center;
+		span {
+			display: inline-block;
+			margin-left: 5px;
+		}
+	}
+
+	&-tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+		margin-bottom: 4px;
+		list-style: none;
+		max-height: 100px;
+		overflow-y: auto;
+	}
+	&-tag {
+		border: 1px solid rgba(0, 0, 0, 0.5);
+		border-radius: 2px;
+		padding: 3px 5px;
+		overflow-wrap: anywhere;
+		list-style: none;
+	}
+
+	&-text {
+		line-height: 1.83;
+		overflow-wrap: anywhere;
+		max-height: 300px;
+		overflow-y: auto;
+	}
+
+	&-profile {
+		display: flex;
+
+		@media (min-width: 767.98px) {
+			align-self: start;
+		}
+	}
+	&-info {
+		flex: 1 1 auto;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		text-align: right;
+		margin-right: 12px;
+	}
+	&-name {
+		color: rgba(0, 0, 0, 0.85);
+		font-size: 18px;
+		line-height: 1.5;
+	}
+	&-date {
+		color: rgba(0, 0, 0, 0.5);
+		font-size: 12px;
+		line-height: 1.2;
+	}
+	&-avatar {
+		width: 46px;
+		height: 46px;
+		background-color: #1890ff;
+		border-radius: 50%;
+		overflow: hidden;
+		img {
+			max-width: 100%;
+			min-height: 100%;
+			object-fit: cover;
+		}
+	}
+}
+
+//============
