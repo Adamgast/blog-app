@@ -1,6 +1,7 @@
-import { ArticleList } from '../../modules/ArticleList';
 import { Routes, Route } from 'react-router-dom';
-import { ArticleFull } from '../../modules/ArticleFull/components/article-full/ArticleFull';
+import { ArticleList } from '../../modules/ArticleList';
+import { ArticleFull } from '../../modules/ArticleFull';
+import { LoginForm, Profile, RegistrationForm } from '../../modules/User';
 import { Layout } from '../layout/Layout';
 
 const App = () => {
@@ -10,6 +11,9 @@ const App = () => {
         <Route index element={<ArticleList />} />
         <Route path="articles" element={<ArticleList />} />
         <Route path="articles/:slug" element={<ArticleFull />} />
+        <Route path="sign-up" element={<RegistrationForm />} />
+        <Route path="sign-in" element={<LoginForm />} />
+        <Route path="profile" element={<Profile />} />
       </Route>
     </Routes>
   );

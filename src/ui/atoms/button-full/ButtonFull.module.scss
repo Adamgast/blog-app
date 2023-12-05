@@ -1,0 +1,18 @@
+.button-full {
+	border-radius: 4px;
+	padding: 8px 16px;
+	min-height: 40px;
+	width: 100%;
+	color: #fff;
+	text-align: center;
+	font-family: Roboto;
+	font-size: 16px;
+	line-height: 1.5;
+	background-color: #1890ff;
+	&_red {
+		background-color: red;
+	}
+	&:disabled {
+		background-color: rgba(24, 143, 255, 0.5);
+	}
+}

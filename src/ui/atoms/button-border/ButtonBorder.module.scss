@@ -1,0 +1,17 @@
+.button-border {
+	border-radius: 4px;
+	min-height: 40px;
+	padding: 8px 16px;
+	text-align: center;
+	font-family: Roboto;
+	font-size: 16px;
+	line-height: 1.5;
+	&_red {
+		color: #f5222d;
+		border: 1px solid #f5222d;
+	}
+	&_blue {
+		color: #1890ff;
+		border: 1px solid #1890ff;
+	}
+}
