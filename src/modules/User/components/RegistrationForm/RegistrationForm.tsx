@@ -1,14 +1,15 @@
 import { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import type { SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useAppDispatch } from '../../../../hooks/useAppDispatch';
 import { useAppSelector } from '../../../../hooks/useAppSelector';
+import { InputBox } from '../../../../ui/molecules/input-box/InputBox';
 import { ButtonFull } from '../../../../ui/atoms/button-full/ButtonFull';
 import { ContainerForm } from '../../../../ui/atoms/container-form/ContainerForm';
 import { TitleForm } from '../../../../ui/atoms/title-form/TitleForm';
-import { Label } from '../../../../ui/atoms/label/Label';
 import { IRegist } from '../../models/IRegist';
 import { clearServerErrors, registrationUser } from '../../store/userSlice';
 import cl from './RegistrationForm.module.scss';
@@ -16,6 +17,7 @@ import cl from './RegistrationForm.module.scss';
 export const RegistrationForm = () => {
   const dispatch = useAppDispatch();
   const { isLoading, serverErrors } = useAppSelector((state) => state.user);
+  const navigate = useNavigate();
 
   useEffect(() => {
     return () => {
@@ -31,18 +33,21 @@ export const RegistrationForm = () => {
       .string()
       .oneOf([yup.ref('password')], 'password should match!')
       .required('repeat password is required'),
-    checkbox: yup.boolean().oneOf([true]),
+    checkbox: yup.boolean().oneOf([true]).required(),
   });
 
   const {
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm({ resolver: yupResolver(schema) });
+  } = useForm<IRegist>({ resolver: yupResolver(schema) });
 
-  const onSubmit = (data: IRegist) => {
+  const onSubmit: SubmitHandler<IRegist> = async (data) => {
     dispatch(clearServerErrors());
-    dispatch(registrationUser(data));
+    const result = await dispatch(registrationUser(data));
+    if (result.meta.requestStatus === 'fulfilled') {
+      navigate('/sign-in');
+    }
   };
 
   return (
@@ -50,52 +55,40 @@ export const RegistrationForm = () => {
       <TitleForm>Create new account</TitleForm>
 
       <div className={cl['form-fields']}>
-        <div className={cl['input-box']}>
-          <Label id="userName">Username</Label>
-          <input
-            type="text"
-            id="userName"
-            placeholder="Username"
-            {...register('username')}
-            className={`${cl['input-field']} ${(errors.username || serverErrors?.username) && cl['input-error']}`}
-          />
-          <p>{errors.username?.message}</p>
-          <p>{serverErrors?.username && `username ${serverErrors?.username}`}</p>
-        </div>
-        <div className={cl['input-box']}>
-          <Label id="email">Email address</Label>
-          <input
-            type="text"
-            id="email"
-            placeholder="Email address"
-            {...register('email')}
-            className={`${cl['input-field']} ${(errors.email || serverErrors?.email) && cl['input-error']}`}
-          />
-          <p>{errors.email?.message}</p>
-          <p>{serverErrors?.email && `email ${serverErrors?.email}`}</p>
-        </div>
-        <div className={cl['input-box']}>
-          <Label id="password">Password</Label>
-          <input
-            type="password"
-            id="password"
-            placeholder="Password"
-            {...register('password')}
-            className={`${cl['input-field']} ${errors.password && cl['input-error']}`}
-          />
-          <p>{errors.password?.message}</p>
-        </div>
-        <div className={cl['input-box']}>
-          <Label id="repeatPassword">Repeat Password</Label>
-          <input
-            type="password"
-            id="repeatPassword"
-            placeholder="Password"
-            {...register('repeatPassword')}
-            className={`${cl['input-field']} ${errors.repeatPassword && cl['input-error']}`}
-          />
-          <p>{errors.repeatPassword?.message}</p>
-        </div>
+        <InputBox
+          type="text"
+          textLabel="Username"
+          placeholder="Username"
+          errors={errors.username?.message}
+          serverErrors={serverErrors?.username}
+          label="username"
+          register={register}
+        />
+        <InputBox
+          type="text"
+          textLabel="Email address"
+          placeholder="Email address"
+          errors={errors.email?.message}
+          serverErrors={serverErrors?.email}
+          label="email"
+          register={register}
+        />
+        <InputBox
+          type="password"
+          textLabel="Password"
+          placeholder="Password"
+          errors={errors.password?.message}
+          label="password"
+          register={register}
+        />
+        <InputBox
+          type="password"
+          textLabel="Repeat Password"
+          placeholder="Password"
+          errors={errors.repeatPassword?.message}
+          label="repeatPassword"
+          register={register}
+        />
       </div>
 
       <label htmlFor="checkbox" className={cl['checkbox-label']}>

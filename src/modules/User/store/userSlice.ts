@@ -13,7 +13,6 @@ import { UserResponse } from '../models/response/UserResponse';
 const initialState: UserState = {
   currentUser: null,
   serverErrors: null,
-  isAuth: false,
   isLoading: false,
 };
 
@@ -43,7 +42,7 @@ export const loginUser = createAsyncThunk<UserResponse, ILogin, { rejectValue: T
 );
 
 export const uploadUser = createAsyncThunk<UserResponse, IProfile, { rejectValue: TypeServerErrors }>(
-  'user/editUser',
+  'user/uploadUser',
   async (user, thunkAPI) => {
     try {
       const response = await editUser(user);
@@ -79,7 +78,6 @@ export const userSlice = createSlice({
     },
     logout(state) {
       state.currentUser = null;
-      state.isAuth = false;
       localStorage.removeItem('token');
     },
   },
@@ -93,13 +91,16 @@ export const userSlice = createSlice({
     builder.addCase(uploadUser.pending, (state) => {
       state.isLoading = true;
     });
+
+    builder.addCase(registrationUser.fulfilled, (state) => {
+      state.isLoading = false;
+    });
     builder.addCase(loginUser.fulfilled, (state, action) => {
       const userData = {
         username: action.payload.user.username,
         email: action.payload.user.email,
         image: action.payload.user.image,
       };
-      state.isAuth = true;
       state.isLoading = false;
       state.currentUser = userData;
     });
@@ -109,7 +110,6 @@ export const userSlice = createSlice({
         email: action.payload.user.email,
         image: action.payload.user.image,
       };
-      state.isAuth = true;
       state.currentUser = userData;
     });
     builder.addCase(uploadUser.fulfilled, (state, action) => {
@@ -121,6 +121,7 @@ export const userSlice = createSlice({
       state.isLoading = false;
       state.currentUser = userData;
     });
+
     builder.addMatcher(isError, (state, action) => {
       state.isLoading = false;
       state.serverErrors = action.payload;

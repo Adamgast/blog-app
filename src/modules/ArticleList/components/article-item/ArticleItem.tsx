@@ -1,10 +1,13 @@
 import { Link } from 'react-router-dom';
+import { useValidAvatar } from '../../../../hooks/useValidAvatar';
 import { TypeArticle } from '../../../../store/action-types';
 import { formatDate } from '../../../../utils/format-date';
 import { ReactComponent as Heart } from '../../../../assets/svg/heart.svg';
 import cl from './ArticleItem.module.scss';
 
 export const ArticleItem = ({ article }: { article: TypeArticle }) => {
+  const src = useValidAvatar(article.author.image);
+
   const tags = article.tagList.map((tag, i) => (
     <li key={i + 2} className={cl['article-tag']}>
       {tag}
@@ -31,7 +34,7 @@ export const ArticleItem = ({ article }: { article: TypeArticle }) => {
           <div className={cl['article-date']}>{formatDate(article.createdAt)}</div>
         </div>
         <div className={cl['article-avatar']}>
-          <img src={article.author.image} alt="avatar" />
+          <img src={src} alt="avatar" />
         </div>
       </div>
     </article>

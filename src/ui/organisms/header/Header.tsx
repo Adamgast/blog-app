@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
 import { useAppDispatch } from '../../../hooks/useAppDispatch';
 import { useAppSelector } from '../../../hooks/useAppSelector';
+import { useValidAvatar } from '../../../hooks/useValidAvatar';
 import { logout } from '../../../modules/User/store/userSlice';
-import defaultavatar from '../../../assets/images/avatar.png';
 import cl from './Header.module.scss';
 
 interface HeaderProps {
@@ -11,7 +11,8 @@ interface HeaderProps {
 
 export const Header = ({ titleText }: HeaderProps) => {
   const dispatch = useAppDispatch();
-  const { currentUser, isAuth } = useAppSelector((state) => state.user);
+  const { currentUser } = useAppSelector((state) => state.user);
+  const src = useValidAvatar(currentUser?.image);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -36,10 +37,10 @@ export const Header = ({ titleText }: HeaderProps) => {
       <Link to="/profile">
         <div className={cl['header-user']}>
           <span>{currentUser?.username}</span>
-          <img src={currentUser?.image || defaultavatar} alt="avatar" />
+          <img src={src} alt="avatar" />
         </div>
       </Link>
-      <Link to="/sign-in">
+      <Link to="/">
         <button onClick={handleLogout} className={`${cl['header-button']} ${cl['header-button_black']}`}>
           Log Out
         </button>
@@ -52,7 +53,7 @@ export const Header = ({ titleText }: HeaderProps) => {
       <Link className={cl['header-title']} to="/">
         {titleText}
       </Link>
-      <div className={cl['header-actions']}>{isAuth ? authContent : defaultContent}</div>
+      <div className={cl['header-actions']}>{localStorage.getItem('token') ? authContent : defaultContent}</div>
     </header>
   );
 };

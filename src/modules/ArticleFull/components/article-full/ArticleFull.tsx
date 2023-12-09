@@ -3,6 +3,7 @@ import Markdown from 'react-markdown';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch } from '../../../../hooks/useAppDispatch';
 import { useAppSelector } from '../../../../hooks/useAppSelector';
+import { useValidAvatar } from '../../../../hooks/useValidAvatar';
 import { Spinner } from '../../../../ui/molecules/spinner/Spinner';
 import { Error } from '../../../../ui/molecules/error/Error';
 import { fetchArticleFull } from '../../store/articleFullSlice';
@@ -14,6 +15,7 @@ export const ArticleFull = () => {
   const { slug } = useParams();
   const dispatch = useAppDispatch();
   const { article, isError, isLoading } = useAppSelector((state) => state.articleFull);
+  const src = useValidAvatar(article?.author.image);
 
   useEffect(() => {
     if (slug) dispatch(fetchArticleFull(slug));
@@ -51,7 +53,7 @@ export const ArticleFull = () => {
             <div className={cl['article-date']}>{formatDate(article?.createdAt)}</div>
           </div>
           <div className={cl['article-avatar']}>
-            <img src={article?.author.image} alt="avatar" />
+            <img src={src} alt="avatar" />
           </div>
         </div>
       </div>

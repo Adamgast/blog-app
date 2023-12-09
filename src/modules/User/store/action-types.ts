@@ -1,7 +1,6 @@
 export interface UserState {
   currentUser: IUser | null;
-  serverErrors: TypeServerErrors | null | undefined;
-  isAuth: boolean;
+  serverErrors: TypeServerErrors | null;
   isLoading: boolean;
 }
 

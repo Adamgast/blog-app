@@ -1,20 +1,24 @@
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import type { SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import { getUser } from '../../api/getUser';
 import { useAppDispatch } from '../../../../hooks/useAppDispatch';
 import { useAppSelector } from '../../../../hooks/useAppSelector';
 import { clearServerErrors, uploadUser } from '../../store/userSlice';
+import { InputBox } from '../../../../ui/molecules/input-box/InputBox';
 import { ButtonFull } from '../../../../ui/atoms/button-full/ButtonFull';
 import { ContainerForm } from '../../../../ui/atoms/container-form/ContainerForm';
 import { TitleForm } from '../../../../ui/atoms/title-form/TitleForm';
-import { Label } from '../../../../ui/atoms/label/Label';
 import { IProfile } from '../../models/IProfile';
 import cl from './Profile.module.scss';
 
 export const Profile = () => {
   const dispatch = useAppDispatch();
-  const { isLoading, serverErrors, currentUser } = useAppSelector((state) => state.user);
+  const { isLoading, serverErrors } = useAppSelector((state) => state.user);
+  const navigate = useNavigate();
 
   useEffect(() => {
     return () => {
@@ -33,11 +37,20 @@ export const Profile = () => {
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm({ resolver: yupResolver(schema) });
+  } = useForm<IProfile>({
+    resolver: yupResolver(schema),
+    defaultValues: async () => {
+      const response = await getUser();
+      return response.data.user;
+    },
+  });
 
-  const onSubmit = (data: IProfile) => {
+  const onSubmit: SubmitHandler<IProfile> = async (data) => {
     dispatch(clearServerErrors());
-    dispatch(uploadUser(data));
+    const result = await dispatch(uploadUser(data));
+    if (result.meta.requestStatus === 'fulfilled') {
+      navigate('/');
+    }
   };
 
   return (
@@ -45,55 +58,40 @@ export const Profile = () => {
       <TitleForm>Edit Profile</TitleForm>
 
       <div className={cl['form-fields']}>
-        <div className={cl['input-box']}>
-          <Label id="userName">Username</Label>
-          <input
-            type="text"
-            id="userName"
-            placeholder="Username"
-            defaultValue={currentUser?.username}
-            {...register('username')}
-            className={`${cl['input-field']} ${(errors.username || serverErrors?.username) && cl['input-error']}`}
-          />
-          <p>{errors.username?.message}</p>
-          <p>{serverErrors?.username && `username ${serverErrors?.username}`}</p>
-        </div>
-        <div className={cl['input-box']}>
-          <Label id="email">Email address</Label>
-          <input
-            type="text"
-            id="email"
-            placeholder="Email address"
-            defaultValue={currentUser?.email}
-            {...register('email')}
-            className={`${cl['input-field']} ${(errors.email || serverErrors?.email) && cl['input-error']}`}
-          />
-          <p>{errors.email?.message}</p>
-          <p>{serverErrors?.email && `email ${serverErrors?.email}`}</p>
-        </div>
-        <div className={cl['input-box']}>
-          <Label id="newPassword">New password</Label>
-          <input
-            type="password"
-            id="newPassword"
-            placeholder="New password"
-            {...register('newpassword')}
-            className={`${cl['input-field']} ${errors.newpassword && cl['input-error']}`}
-          />
-          <p>{errors.newpassword?.message}</p>
-        </div>
-        <div className={cl['input-box']}>
-          <Label id="avatarImage">Avatar image (url)</Label>
-          <input
-            type="text"
-            id="avatarImage"
-            placeholder="Avatar image"
-            defaultValue={currentUser?.image}
-            {...register('image')}
-            className={`${cl['input-field']} ${errors.image && cl['input-error']}`}
-          />
-          <p>{errors.image?.message}</p>
-        </div>
+        <InputBox
+          type="text"
+          textLabel="Username"
+          placeholder="Username"
+          errors={errors.username?.message}
+          serverErrors={serverErrors?.username}
+          label="username"
+          register={register}
+        />
+        <InputBox
+          type="text"
+          textLabel="Email address"
+          placeholder="Email address"
+          errors={errors.email?.message}
+          serverErrors={serverErrors?.email}
+          label="email"
+          register={register}
+        />
+        <InputBox
+          type="password"
+          textLabel="New password"
+          placeholder="New password"
+          errors={errors.newpassword?.message}
+          label="newpassword"
+          register={register}
+        />
+        <InputBox
+          type="text"
+          textLabel="Avatar image (url)"
+          placeholder="Avatar image"
+          errors={errors.image?.message}
+          label="image"
+          register={register}
+        />
       </div>
 
       <ButtonFull disabled={isLoading} type="submit">
