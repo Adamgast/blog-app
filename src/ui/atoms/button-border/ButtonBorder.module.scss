@@ -1,17 +1,47 @@
 .button-border {
 	border-radius: 4px;
 	min-height: 40px;
+	min-width: 118px;
 	padding: 8px 16px;
 	text-align: center;
 	font-family: Roboto;
 	font-size: 16px;
-	line-height: 1.5;
+	transition: all 0.3s ease 0s;
 	&_red {
 		color: #f5222d;
 		border: 1px solid #f5222d;
+		@media (any-hover: hover) {
+			&:hover {
+				color: #fff;
+				background-color: #f5222d;
+			}
+		}
 	}
 	&_blue {
 		color: #1890ff;
 		border: 1px solid #1890ff;
+		@media (any-hover: hover) {
+			&:hover {
+				color: #fff;
+				background-color: #1890ff;
+			}
+		}
 	}
+	&_green {
+		color: #52c41a;
+		border: 1px solid #52c41a;
+		@media (any-hover: hover) {
+			&:hover {
+				color: #fff;
+				background-color: #52c41a;
+			}
+		}
+	}
+}
+
+.smallBtn {
+	font-size: 14px;
+	padding: 6px 15px;
+	min-height: 30px;
+	min-width: auto;
 }

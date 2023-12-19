@@ -8,6 +8,7 @@ export type TypeServerErrors = {
   username?: string;
   email?: string;
   'email or password'?: string;
+  errortext: string;
 };
 
 export interface IUser {

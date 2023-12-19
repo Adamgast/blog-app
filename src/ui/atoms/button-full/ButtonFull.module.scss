@@ -8,9 +8,18 @@
 	font-family: Roboto;
 	font-size: 16px;
 	line-height: 1.5;
+	transition: background-color 0.3s ease 0s;
 	background-color: #1890ff;
+	@media (any-hover: hover) {
+		&:hover {
+			background-color: #00529f;
+		}
+	}
 	&_red {
 		background-color: red;
+	}
+	&_min {
+		max-width: 320px;
 	}
 	&:disabled {
 		background-color: rgba(24, 143, 255, 0.5);

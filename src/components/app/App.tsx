@@ -1,6 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { ArticleList } from '../../modules/ArticleList';
-import { ArticleFull } from '../../modules/ArticleFull';
+import { ArticleFull, EditArticle, NewArticle } from '../../modules/Article';
 import { LoginForm, Profile, RegistrationForm } from '../../modules/User';
 import { RequireAuth } from '../../hoc/require-auth/RequireAuth';
 import { RequireGuest } from '../../hoc/require-guest/RequireGuest';
@@ -34,6 +34,22 @@ const App = () => {
           element={
             <RequireAuth>
               <Profile />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="new-article"
+          element={
+            <RequireAuth>
+              <NewArticle />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="articles/:slug/edit"
+          element={
+            <RequireAuth>
+              <EditArticle />
             </RequireAuth>
           }
         />

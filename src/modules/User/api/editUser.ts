@@ -1,16 +1,12 @@
-import axios from 'axios';
 import type { AxiosResponse } from 'axios';
 import { UserResponse } from '../models/response/UserResponse';
 import { IProfile } from '../models/IProfile';
+import { api } from '../../../http';
 
 export const editUser = async (user: IProfile): Promise<AxiosResponse<UserResponse>> => {
-  const config = {
+  const body = {
     user: user,
   };
-  const response = await axios.put<UserResponse>('https://blog.kata.academy/api/user', config, {
-    headers: {
-      Authorization: `Token ${localStorage.getItem('token')}`,
-    },
-  });
+  const response = await api.put<UserResponse>('/user', body);
   return response;
 };

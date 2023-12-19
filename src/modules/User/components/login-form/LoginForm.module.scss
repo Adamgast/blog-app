@@ -2,6 +2,9 @@
 	&-fields {
 		margin-top: 20px;
 		margin-bottom: 20px;
+		display: flex;
+		flex-direction: column;
+		row-gap: 10px;
 	}
 	&-bottom {
 		margin-top: 8px;

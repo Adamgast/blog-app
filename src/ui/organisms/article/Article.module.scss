@@ -1,32 +1,21 @@
 //article ====
-.custom-scrollbar {
-	&::-webkit-scrollbar-track {
-		border-radius: 4px;
-	}
-	&::-webkit-scrollbar {
-		width: 5px;
-	}
-	&::-webkit-scrollbar-thumb {
-		border-radius: 4px;
-		background: #f0f2f5;
-	}
-	&:hover::-webkit-scrollbar-thumb {
-		background: #6a7d9b;
-	}
-}
-
 .article {
-	@media (min-width: 767.98px) {
-		display: flex;
-		justify-content: space-between;
-		padding: 15px 15px 24px;
-	}
 	padding: 15px;
 	box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.15);
 	border-radius: 5px;
 	background-color: #fff;
+	min-height: 140px;
+	&-body {
+		display: flex;
+		@media (min-width: 767.98px) {
+			justify-content: space-between;
+		}
+		@media (max-width: 767.98px) {
+			flex-direction: column;
+		}
+	}
 
-	&-data {
+	&-top {
 		font-size: 12px;
 		color: rgba(0, 0, 0, 0.75);
 
@@ -35,7 +24,8 @@
 			margin-right: 10px;
 		}
 		@media (max-width: 767.98px) {
-			margin-bottom: 15px;
+			margin-top: 15px;
+			order: 1;
 		}
 	}
 
@@ -49,20 +39,26 @@
 	&-title {
 		color: #1890ff;
 		font-size: 20px;
+		font-weight: 400;
 		line-height: 1.4;
 		margin-right: 13px;
 		overflow-wrap: anywhere;
-		cursor: pointer;
-		max-height: 100px;
-		overflow-y: auto;
+	}
+	&-link {
+		transition: color 0.3s ease 0s;
+		@media (any-hover: hover) {
+			&:hover {
+				color: #00529f;
+			}
+		}
 	}
 	&-likes {
 		align-self: flex-start;
-		line-height: 1.83;
 		margin-top: 3px;
-		cursor: pointer;
+		line-height: 1.83;
 		display: inline-flex;
 		align-items: center;
+		cursor: pointer;
 		span {
 			display: inline-block;
 			margin-left: 5px;
@@ -75,8 +71,6 @@
 		gap: 8px;
 		margin-bottom: 4px;
 		list-style: none;
-		max-height: 100px;
-		overflow-y: auto;
 	}
 	&-tag {
 		border: 1px solid rgba(0, 0, 0, 0.5);
@@ -89,14 +83,12 @@
 	&-text {
 		line-height: 1.83;
 		overflow-wrap: anywhere;
-		max-height: 300px;
-		overflow-y: auto;
 	}
 
-	&-profile {
+	&-user {
 		display: flex;
-
 		@media (min-width: 767.98px) {
+			flex: 1 0 auto;
 			align-self: start;
 		}
 	}
@@ -129,6 +121,17 @@
 			min-height: 100%;
 			object-fit: cover;
 		}
+	}
+	&-btns {
+		display: flex;
+		column-gap: 12px;
+		justify-content: flex-end;
+		margin-top: 30px;
+	}
+	&-markdown {
+		overflow-wrap: anywhere;
+		color: rgba(0, 0, 0, 0.75);
+		margin-top: 25px;
 	}
 }
 

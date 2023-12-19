@@ -4,10 +4,12 @@ import { useForm } from 'react-hook-form';
 import type { SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+
 import { getUser } from '../../api/getUser';
 import { useAppDispatch } from '../../../../hooks/useAppDispatch';
 import { useAppSelector } from '../../../../hooks/useAppSelector';
 import { clearServerErrors, uploadUser } from '../../store/userSlice';
+import { Error } from '../../../../ui/molecules/error/Error';
 import { InputBox } from '../../../../ui/molecules/input-box/InputBox';
 import { ButtonFull } from '../../../../ui/atoms/button-full/ButtonFull';
 import { ContainerForm } from '../../../../ui/atoms/container-form/ContainerForm';
@@ -54,49 +56,52 @@ export const Profile = () => {
   };
 
   return (
-    <ContainerForm onSubmit={handleSubmit(onSubmit)}>
-      <TitleForm>Edit Profile</TitleForm>
+    <>
+      {serverErrors?.errortext && <Error errorText={serverErrors?.errortext} />}
+      <ContainerForm mobile onSubmit={handleSubmit(onSubmit)}>
+        <TitleForm>Edit Profile</TitleForm>
 
-      <div className={cl['form-fields']}>
-        <InputBox
-          type="text"
-          textLabel="Username"
-          placeholder="Username"
-          errors={errors.username?.message}
-          serverErrors={serverErrors?.username}
-          label="username"
-          register={register}
-        />
-        <InputBox
-          type="text"
-          textLabel="Email address"
-          placeholder="Email address"
-          errors={errors.email?.message}
-          serverErrors={serverErrors?.email}
-          label="email"
-          register={register}
-        />
-        <InputBox
-          type="password"
-          textLabel="New password"
-          placeholder="New password"
-          errors={errors.newpassword?.message}
-          label="newpassword"
-          register={register}
-        />
-        <InputBox
-          type="text"
-          textLabel="Avatar image (url)"
-          placeholder="Avatar image"
-          errors={errors.image?.message}
-          label="image"
-          register={register}
-        />
-      </div>
+        <div className={cl['form-fields']}>
+          <InputBox
+            type="text"
+            textLabel="Username"
+            placeholder="Username"
+            errors={errors.username?.message}
+            serverErrors={serverErrors?.username}
+            label="username"
+            register={register}
+          />
+          <InputBox
+            type="text"
+            textLabel="Email address"
+            placeholder="Email address"
+            errors={errors.email?.message}
+            serverErrors={serverErrors?.email}
+            label="email"
+            register={register}
+          />
+          <InputBox
+            type="password"
+            textLabel="New password"
+            placeholder="New password"
+            errors={errors.newpassword?.message}
+            label="newpassword"
+            register={register}
+          />
+          <InputBox
+            type="text"
+            textLabel="Avatar image (url)"
+            placeholder="Avatar image"
+            errors={errors.image?.message}
+            label="image"
+            register={register}
+          />
+        </div>
 
-      <ButtonFull disabled={isLoading} type="submit">
-        Save
-      </ButtonFull>
-    </ContainerForm>
+        <ButtonFull disabled={isLoading} type="submit">
+          Save
+        </ButtonFull>
+      </ContainerForm>
+    </>
   );
 };

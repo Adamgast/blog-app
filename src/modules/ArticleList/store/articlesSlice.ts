@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { isAxiosError } from 'axios';
 import { getAllArticles } from '../api/getAllArticles';
 import { ArticlesState, IArticlesData } from './action-types';
 
@@ -9,15 +10,21 @@ const initialState: ArticlesState = {
   isError: null,
 };
 
-export const fetchArticles = createAsyncThunk<IArticlesData, number, { rejectValue: void }>(
+export const fetchArticles = createAsyncThunk<IArticlesData, number, { rejectValue: string }>(
   'articles/fetchArticles',
   async (page, { rejectWithValue }) => {
-    const response = await getAllArticles(page);
-    if (response.status < 200 || response.status > 299) {
-      return rejectWithValue();
+    try {
+      const response = await getAllArticles(page);
+      return response.data;
+    } catch (error) {
+      if (isAxiosError(error) && error.response) {
+        if (typeof error.response.data.errors === 'object') {
+          return rejectWithValue(`Status code: ${error.response.status}. ${error.response.data.errors.message}`);
+        }
+        return rejectWithValue(`Status code: ${error.response.status}. ${error.response.data}`);
+      }
+      return rejectWithValue('Server Error!');
     }
-    const result: IArticlesData = response.data;
-    return result;
   }
 );
 
@@ -38,7 +45,7 @@ export const articlesSlice = createSlice({
       })
       .addCase(fetchArticles.rejected, (state, action) => {
         state.isLoading = false;
-        if (action.error.message) state.isError = action.error.message;
+        if (action.payload) state.isError = action.payload;
       });
   },
 });

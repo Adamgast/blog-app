@@ -1,0 +1,72 @@
+.form {
+	&-fields {
+		margin-top: 20px;
+		margin-bottom: 20px;
+		display: flex;
+		flex-direction: column;
+		row-gap: 20px;
+	}
+	&-tagsBox {
+		margin-bottom: 20px;
+		display: flex;
+		gap: 10px 20px;
+		flex-wrap: wrap;
+	}
+	&-tags {
+		max-width: 438px;
+		p {
+			color: #f5222d;
+			font-size: 14px;
+			margin-bottom: 5px;
+		}
+	}
+	&-tag {
+		display: flex;
+		align-items: flex-start;
+		column-gap: 20px;
+		&:not(:last-child) {
+			margin-bottom: 5px;
+		}
+		@media (max-width: 519.98px) {
+			column-gap: 10px;
+		}
+	}
+}
+
+.btn-container {
+	align-self: end;
+}
+
+.input-field {
+	border-radius: 4px;
+	border: 1px solid #d9d9d9;
+	height: 40px;
+	width: 300px;
+	padding: 8px 12px;
+	font-size: 16px;
+	line-height: 1.5;
+	@media (max-width: 519.98px) {
+		max-width: 300px;
+		width: 100%;
+	}
+	&::-webkit-input-placeholder {
+		/* WebKit browsers */
+		color: #bfbfbf;
+	}
+	&:-moz-placeholder {
+		/* Mozilla Firefox 4 to 18 */
+		color: #bfbfbf;
+	}
+	&::-moz-placeholder {
+		/* Mozilla Firefox 19+ */
+		color: #bfbfbf;
+	}
+	&:-ms-input-placeholder {
+		/* Internet Explorer 10+ */
+		color: #bfbfbf;
+	}
+}
+.input-error {
+	border: 1px solid #f5222d;
+	outline: none;
+}

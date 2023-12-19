@@ -1,18 +1,16 @@
-import { ReactNode, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { ReactNode } from 'react';
+import { Navigate } from 'react-router-dom';
 
 interface PropsRequireAuth {
   children: ReactNode;
 }
 
 export const RequireGuest = ({ children }: PropsRequireAuth) => {
-  const navigate = useNavigate();
+  const isAuth = localStorage.getItem('token');
 
-  useEffect(() => {
-    if (localStorage.getItem('token')) {
-      navigate('/');
-    }
-  }, [navigate]);
+  if (isAuth) {
+    return <Navigate to="/" />;
+  }
 
   return <>{children}</>;
 };

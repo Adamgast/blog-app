@@ -4,9 +4,11 @@ import { useForm } from 'react-hook-form';
 import type { SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+
 import { useAppDispatch } from '../../../../hooks/useAppDispatch';
 import { useAppSelector } from '../../../../hooks/useAppSelector';
 import { clearServerErrors, loginUser } from '../../store/userSlice';
+import { Error } from '../../../../ui/molecules/error/Error';
 import { InputBox } from '../../../../ui/molecules/input-box/InputBox';
 import { ButtonFull } from '../../../../ui/atoms/button-full/ButtonFull';
 import { ContainerForm } from '../../../../ui/atoms/container-form/ContainerForm';
@@ -45,42 +47,45 @@ export const LoginForm = () => {
   };
 
   return (
-    <ContainerForm onSubmit={handleSubmit(onSubmit)}>
-      <TitleForm>Sign In</TitleForm>
+    <>
+      {serverErrors?.errortext && <Error errorText={serverErrors?.errortext} />}
+      <ContainerForm mobile onSubmit={handleSubmit(onSubmit)}>
+        <TitleForm>Sign In</TitleForm>
 
-      <div className={cl['form-fields']}>
-        <InputBox
-          type="text"
-          textLabel="Email address"
-          errors={errors.email?.message}
-          label="email"
-          register={register}
-          placeholder="Email address"
-        />
-        <InputBox
-          type="password"
-          textLabel="Password"
-          errors={errors.password?.message}
-          label="password"
-          register={register}
-          placeholder="Password"
-        />
-      </div>
+        <div className={cl['form-fields']}>
+          <InputBox
+            type="text"
+            textLabel="Email address"
+            errors={errors.email?.message}
+            label="email"
+            register={register}
+            placeholder="Email address"
+          />
+          <InputBox
+            type="password"
+            textLabel="Password"
+            errors={errors.password?.message}
+            label="password"
+            register={register}
+            placeholder="Password"
+          />
+        </div>
 
-      <div className={cl['server-errors']}>
-        {serverErrors?.['email or password'] && `email or password ${serverErrors?.['email or password']}`}
-      </div>
+        <div className={cl['server-errors']}>
+          {serverErrors?.['email or password'] && `email or password ${serverErrors?.['email or password']}`}
+        </div>
 
-      <ButtonFull disabled={isLoading} type="submit">
-        Login
-      </ButtonFull>
+        <ButtonFull disabled={isLoading} type="submit">
+          Login
+        </ButtonFull>
 
-      <div className={cl['form-bottom']}>
-        Don’t have an account?{' '}
-        <Link className={cl['form-link']} to="/sign-up">
-          Sign Up.
-        </Link>
-      </div>
-    </ContainerForm>
+        <div className={cl['form-bottom']}>
+          Don’t have an account?{' '}
+          <Link className={cl['form-link']} to="/sign-up">
+            Sign Up.
+          </Link>
+        </div>
+      </ContainerForm>
+    </>
   );
 };

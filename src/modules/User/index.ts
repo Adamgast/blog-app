@@ -1,6 +1,6 @@
-import { LoginForm } from './components/LoginForm/LoginForm';
-import { RegistrationForm } from './components/RegistrationForm/RegistrationForm';
-import { Profile } from './components/Profile/Profile';
+import { LoginForm } from './components/login-form/LoginForm';
+import { RegistrationForm } from './components/registration-form/RegistrationForm';
+import { Profile } from './components/profile/Profile';
 import userSlice from './store/userSlice';
 
 export { userSlice, LoginForm, RegistrationForm, Profile };

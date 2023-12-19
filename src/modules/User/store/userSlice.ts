@@ -1,3 +1,4 @@
+import { isAxiosError } from 'axios';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import type { AnyAction } from '@reduxjs/toolkit';
 import { registration } from '../api/registration';
@@ -18,56 +19,74 @@ const initialState: UserState = {
 
 export const registrationUser = createAsyncThunk<UserResponse, IRegist, { rejectValue: TypeServerErrors }>(
   'user/registrationUser',
-  async (user, thunkAPI) => {
+  async (user, { rejectWithValue }) => {
     try {
       const response = await registration(user);
       return response.data;
-    } catch (error: any) {
-      return thunkAPI.rejectWithValue(error.response.data.errors);
+    } catch (error) {
+      if (isAxiosError(error) && error.response) {
+        return rejectWithValue(error.response.data.errors);
+      }
+      return rejectWithValue({ errortext: 'Server Error!' });
     }
   }
 );
 
 export const loginUser = createAsyncThunk<UserResponse, ILogin, { rejectValue: TypeServerErrors }>(
   'user/loginUser',
-  async (user, thunkAPI) => {
+  async (user, { rejectWithValue }) => {
     try {
       const response = await login(user);
       localStorage.setItem('token', response.data.user.token);
       return response.data;
-    } catch (error: any) {
-      return thunkAPI.rejectWithValue(error.response.data.errors);
+    } catch (error) {
+      if (isAxiosError(error) && error.response) {
+        return rejectWithValue(error.response.data.errors);
+      }
+      return rejectWithValue({ errortext: 'Server Error!' });
     }
   }
 );
 
 export const uploadUser = createAsyncThunk<UserResponse, IProfile, { rejectValue: TypeServerErrors }>(
   'user/uploadUser',
-  async (user, thunkAPI) => {
+  async (user, { rejectWithValue }) => {
     try {
       const response = await editUser(user);
       return response.data;
-    } catch (error: any) {
-      return thunkAPI.rejectWithValue(error.response.data.errors);
+    } catch (error) {
+      if (isAxiosError(error) && error.response) {
+        return rejectWithValue(error.response.data.errors);
+      }
+      return rejectWithValue({ errortext: 'Server Error!' });
     }
   }
 );
 
-export const checkAuth = createAsyncThunk<UserResponse, void, { rejectValue: TypeServerErrors }>(
+export const checkAuth = createAsyncThunk<UserResponse, void, { rejectValue: string }>(
   'user/checkAuth',
-  async (_, thunkAPI) => {
+  async (_, { rejectWithValue }) => {
     try {
       const response = await getUser();
       return response.data;
-    } catch (error: any) {
-      return thunkAPI.rejectWithValue(error.response.data.errors);
+    } catch (error) {
+      return rejectWithValue('Server Error!');
     }
   }
 );
 
-const isError = (action: AnyAction) => {
-  return action.type.endsWith('rejected');
+const funcValid = (value: string, action: AnyAction) => {
+  return (
+    action.type.endsWith(`registrationUser/${value}`) ||
+    action.type.endsWith(`loginUser/${value}`) ||
+    action.type.endsWith(`uploadUser/${value}`) ||
+    action.type.endsWith(`checkAuth/${value}`)
+  );
 };
+
+const isPending = (action: AnyAction) => funcValid('pending', action);
+const isFulfilled = (action: AnyAction) => funcValid('fulfilled', action);
+const isRejected = (action: AnyAction) => funcValid('rejected', action);
 
 export const userSlice = createSlice({
   name: 'user',
@@ -82,47 +101,23 @@ export const userSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(registrationUser.pending, (state) => {
-      state.isLoading = true;
-    });
-    builder.addCase(loginUser.pending, (state) => {
-      state.isLoading = true;
-    });
-    builder.addCase(uploadUser.pending, (state) => {
-      state.isLoading = true;
-    });
-
     builder.addCase(registrationUser.fulfilled, (state) => {
       state.isLoading = false;
     });
-    builder.addCase(loginUser.fulfilled, (state, action) => {
-      const userData = {
-        username: action.payload.user.username,
-        email: action.payload.user.email,
-        image: action.payload.user.image,
-      };
-      state.isLoading = false;
-      state.currentUser = userData;
-    });
-    builder.addCase(checkAuth.fulfilled, (state, action) => {
-      const userData = {
-        username: action.payload.user.username,
-        email: action.payload.user.email,
-        image: action.payload.user.image,
-      };
-      state.currentUser = userData;
-    });
-    builder.addCase(uploadUser.fulfilled, (state, action) => {
-      const userData = {
-        username: action.payload.user.username,
-        email: action.payload.user.email,
-        image: action.payload.user.image,
-      };
-      state.isLoading = false;
-      state.currentUser = userData;
-    });
 
-    builder.addMatcher(isError, (state, action) => {
+    builder.addMatcher(isPending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addMatcher(isFulfilled, (state, action) => {
+      const userData = {
+        username: action.payload.user.username,
+        email: action.payload.user.email,
+        image: action.payload.user.image,
+      };
+      state.isLoading = false;
+      state.currentUser = userData;
+    });
+    builder.addMatcher(isRejected, (state, action) => {
       state.isLoading = false;
       state.serverErrors = action.payload;
     });

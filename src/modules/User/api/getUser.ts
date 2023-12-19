@@ -1,12 +1,8 @@
-import axios from 'axios';
 import type { AxiosResponse } from 'axios';
 import { UserResponse } from '../models/response/UserResponse';
+import { api } from '../../../http';
 
 export const getUser = async (): Promise<AxiosResponse<UserResponse>> => {
-  const response = await axios.get<UserResponse>('https://blog.kata.academy/api/user', {
-    headers: {
-      Authorization: `Token ${localStorage.getItem('token')}`,
-    },
-  });
+  const response = await api.get<UserResponse>('/user');
   return response;
 };
