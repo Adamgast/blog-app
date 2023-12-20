@@ -16,6 +16,12 @@
 		text-align: center;
 	}
 	&-title {
+		transition: color 0.3s ease 0s;
+		@media (any-hover: hover) {
+			&:hover {
+				color: #1890ff;
+			}
+		}
 		@media (max-width: 599.98px) {
 			display: inline-block;
 			margin-bottom: 15px;
