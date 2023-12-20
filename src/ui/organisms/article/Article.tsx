@@ -82,7 +82,6 @@ export const Article = ({ full, onRemoveArticle, article }: ArticleProps) => {
       </button>
     </Tooltip>
   );
-
   const tags = article?.tagList.map((tag) => (
     <li key={uuidv4()} className={cl['article-tag']}>
       {formatText(tag, 100)}
