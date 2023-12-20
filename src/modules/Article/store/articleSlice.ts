@@ -6,6 +6,8 @@ import { getArticleFull } from '../api/getArticleFull';
 import { postNewArticle } from '../api/postNewArticle';
 import { putArticle } from '../api/putArticle';
 import { deleteArticle } from '../api/deleteArticle';
+import { postLikeArticle } from '../api/postLikeArticle';
+import { deleteLikeArticle } from '../api/deleteLikeArticle';
 import { IArticle } from '../models/IArticle';
 import { ArticleState } from './action-types';
 
@@ -81,6 +83,30 @@ export const removeArticle = createAsyncThunk<void, string, { rejectValue: strin
         }
         return rejectWithValue(`Status code: ${error.response.status}. ${error.response.data}`);
       }
+      return rejectWithValue('Server Error!');
+    }
+  }
+);
+
+export const likeArticle = createAsyncThunk<TypeArticle, string, { rejectValue: string }>(
+  'article/likeArticle',
+  async (slug, { rejectWithValue }) => {
+    try {
+      const response = await postLikeArticle(slug);
+      return response.data.article;
+    } catch (error) {
+      return rejectWithValue('Server Error!');
+    }
+  }
+);
+
+export const unLikeArticle = createAsyncThunk<TypeArticle, string, { rejectValue: string }>(
+  'article/likeArticle',
+  async (slug, { rejectWithValue }) => {
+    try {
+      const response = await deleteLikeArticle(slug);
+      return response.data.article;
+    } catch (error) {
       return rejectWithValue('Server Error!');
     }
   }

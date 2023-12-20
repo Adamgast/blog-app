@@ -11,7 +11,6 @@ export const ArticleFull = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { currentUser } = useAppSelector((state) => state.user);
   const { article, isError, isLoading } = useAppSelector((state) => state.articleFull);
 
   useEffect(() => {
@@ -34,5 +33,5 @@ export const ArticleFull = () => {
     return <Error errorText={isError} />;
   }
 
-  return <Article slug={slug} username={currentUser?.username} article={article} onRemoveArticle={onRemoveArticle} />;
+  return <Article full article={article} onRemoveArticle={onRemoveArticle} />;
 };

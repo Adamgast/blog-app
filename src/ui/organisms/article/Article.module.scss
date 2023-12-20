@@ -59,9 +59,22 @@
 		display: inline-flex;
 		align-items: center;
 		cursor: pointer;
+		button {
+			height: 16px;
+		}
 		span {
 			display: inline-block;
 			margin-left: 5px;
+		}
+	}
+
+	&-like {
+		fill: rgba(0, 0, 0, 0.75);
+		transition: fill 0.3s ease 0s;
+		@media (any-hover: hover) {
+			&:hover {
+				fill: red;
+			}
 		}
 	}
 

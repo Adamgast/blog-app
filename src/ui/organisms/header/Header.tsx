@@ -43,7 +43,7 @@ export const Header = ({ titleText }: HeaderProps) => {
           <img src={src} alt="avatar" />
         </div>
       </Link>
-      <Link to="/">
+      <Link to="/sign-in">
         <button onClick={handleLogout} className={`${cl['header-button']} ${cl['header-button_black']}`}>
           Log Out
         </button>
