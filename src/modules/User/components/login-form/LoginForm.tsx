@@ -34,6 +34,7 @@ export const LoginForm = () => {
 
   const {
     register,
+    reset,
     formState: { errors },
     handleSubmit,
   } = useForm<ILogin>({ resolver: yupResolver(schema) });
@@ -44,6 +45,10 @@ export const LoginForm = () => {
     if (result.meta.requestStatus === 'fulfilled') {
       navigate('/');
     }
+  };
+
+  const clearField = (field: string) => {
+    reset({ [field]: '' });
   };
 
   return (
@@ -59,6 +64,7 @@ export const LoginForm = () => {
             errors={errors.email?.message}
             label="email"
             register={register}
+            clearField={() => clearField('email')}
             placeholder="Email address"
           />
           <InputBox

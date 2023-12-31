@@ -4,6 +4,7 @@ import { useAppSelector } from '../../../../hooks/useAppSelector';
 import { useWindowSize } from '../../../../hooks/useWindowSize';
 import { Article } from '../../../../ui/organisms/article/Article';
 import { Spinner } from '../../../../ui/molecules/spinner/Spinner';
+import { SkeletonArticleList } from '../../../../ui/molecules/skeleton-articleList/SkeletonArticleList';
 import { Error } from '../../../../ui/molecules/error/Error';
 import { MyPagination } from '../../../../ui/organisms/my-pagination/MyPagination';
 import { fetchArticles } from '../../store/articlesSlice';
@@ -20,6 +21,9 @@ export const ArticleList = () => {
   }, [dispatch, page]);
 
   if (isLoading) {
+    if (width > 699) {
+      return <SkeletonArticleList />;
+    }
     return <Spinner />;
   }
   if (isError) {

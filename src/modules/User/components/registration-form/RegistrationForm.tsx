@@ -41,6 +41,7 @@ export const RegistrationForm = () => {
     register,
     formState: { errors },
     handleSubmit,
+    reset,
   } = useForm<IRegist>({ resolver: yupResolver(schema) });
 
   const onSubmit: SubmitHandler<IRegist> = async (data) => {
@@ -49,6 +50,10 @@ export const RegistrationForm = () => {
     if (result.meta.requestStatus === 'fulfilled') {
       navigate('/sign-in');
     }
+  };
+
+  const clearField = (field: string) => {
+    reset({ [field]: '' });
   };
 
   return (
@@ -66,6 +71,7 @@ export const RegistrationForm = () => {
             serverErrors={serverErrors?.username}
             label="username"
             register={register}
+            clearField={() => clearField('username')}
           />
           <InputBox
             type="text"
@@ -75,6 +81,7 @@ export const RegistrationForm = () => {
             serverErrors={serverErrors?.email}
             label="email"
             register={register}
+            clearField={() => clearField('email')}
           />
           <InputBox
             type="password"

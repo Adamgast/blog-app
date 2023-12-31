@@ -39,6 +39,7 @@ export const Profile = () => {
     register,
     formState: { errors },
     handleSubmit,
+    reset,
   } = useForm<IProfile>({
     resolver: yupResolver(schema),
     defaultValues: async () => {
@@ -53,6 +54,10 @@ export const Profile = () => {
     if (result.meta.requestStatus === 'fulfilled') {
       navigate('/');
     }
+  };
+
+  const clearField = (field: string) => {
+    reset({ [field]: '' });
   };
 
   return (
@@ -70,6 +75,7 @@ export const Profile = () => {
             serverErrors={serverErrors?.username}
             label="username"
             register={register}
+            clearField={() => clearField('username')}
           />
           <InputBox
             type="text"
@@ -79,6 +85,7 @@ export const Profile = () => {
             serverErrors={serverErrors?.email}
             label="email"
             register={register}
+            clearField={() => clearField('email')}
           />
           <InputBox
             type="password"
@@ -95,6 +102,7 @@ export const Profile = () => {
             errors={errors.image?.message}
             label="image"
             register={register}
+            clearField={() => clearField('image')}
           />
         </div>
 
