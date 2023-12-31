@@ -1,3 +1,3 @@
 # Blog App
 
-## Link => https://blog-app-blue-iota.vercel.app/
+## Link => https://blog-app-sigma-nine.vercel.app/
